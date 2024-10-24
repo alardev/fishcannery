@@ -1,0 +1,21 @@
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: surrealdb
+    restart: always
+    command: start --user cannery --pass cannery123 file:/data/database.db
+    ports:
+      - 8000:8000
+    volumes:
+      - /var/home/alar/surrealdb_data:/data
+
+  fishcannery:
+    build: .
+    ports:
+      - 3000:80
+    depends_on:
+      - surrealdb
+    volumes:
+      - ./assets:/fishcannery/assets
+      - ./config:/fishcannery/config
+      - ./locales:/fishcannery/locales
